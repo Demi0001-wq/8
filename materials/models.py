@@ -21,3 +21,15 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.name
+
+class Subscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='User')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
+
+    class Meta:
+        verbose_name = 'Subscription'
+        verbose_name_plural = 'Subscriptions'
+        unique_together = ('user', 'course')
+
+    def __str__(self):
+        return f'{self.user} - {self.course.name}'
