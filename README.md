@@ -1,79 +1,53 @@
-# LMS Backend (Django REST Framework)
+# LMS Project
 
-A professional Learning Management System (LMS) backend built with Django and Django REST Framework. This project covers user management, hierarchical educational materials, payment integration, and automated documentation.
+This is a backend project for a Learning Management System made with Django and Django REST Framework.
 
-## 🚀 Key Features
+## Features
 
-### 👤 User Management & Security
-- **Email Authentication**: Custom user model using email as the primary identifier.
-- **JWT Authentication**: Secure token-based access using `SimpleJWT`.
-- **RBAC (Role-Based Access Control)**:
-    - **Moderators**: Can view and edit all materials but cannot create or delete.
-    - **Owners**: Full CRUD access to their own educational materials.
+This project includes user management where you can log in with your email. I used SimpleJWT for authentication. There are different roles like Moderators and Owners to handle who can see or edit the courses.
 
-### � Educational Materials (`materials` app)
-- **Courses & Lessons**: Hierarchical structure with nested serializers.
-- **Course Subscriptions**: Users can toggle subscriptions to track course updates.
-- **YouTube Validator**: Custom validator ensures educational videos are strictly from `youtube.com`.
-- **Pagination**: Optimized API responses with 10 items per page.
+The materials app has Courses and Lessons. I added a way for users to subscribe to courses. I also made a validator to make sure video links are only from youtube.com.
 
-### � Stripe Integration
-- **Automated Payments**: Integrated with the Stripe API to handle course/lesson purchases.
-- **Payment Lifecycle**: Create product -> Create price -> Create checkout session -> Retrieve status.
-- **Checkout Links**: Returns a direct Stripe payment link for users in the response.
+For payments, I integrated Stripe. It can create products and prices, and then give a checkout link. You can also check the status of a payment.
 
-### 📖 API Documentation
-Full documentation is automatically generated using `drf-spectacular` (OpenAPI 3.0):
-- **Swagger UI**: `/api/docs/swagger/`
-- **Redoc**: `/api/docs/redoc/`
-- **Schema**: `/api/schema/`
+Documentation is handled by drf-spectacular. You can see the Swagger or Redoc pages to check the endpoints.
 
-## 📦 Tech Stack
-- **Framework**: Django 5.x, DRF
-- **Auth**: SimpleJWT
-- **Payments**: Stripe API
-- **Docs**: drf-spectacular
-- **Database**: SQLite (Default)
+## Tech Stack
+- Django and DRF
+- SimpleJWT for auth
+- Stripe for payments
+- drf-spectacular for docs
+- SQLite
 
-## 🛠️ Setup & Installation
+## How to setup
 
-1. **Clone & Install**:
-   ```bash
+1. Install everything from requirements.txt:
    pip install -r requirements.txt
-   ```
 
-2. **Environment Configuration**:
-   Add your Stripe key to `config/settings.py`:
-   ```python
-   STRIPE_API_KEY = 'sk_test_...'
-   ```
+2. Put your Stripe key in config/settings.py:
+   STRIPE_API_KEY = 'your_key_here'
 
-3. **Migrations & Data**:
-   ```bash
+3. Run the migrations:
    python manage.py migrate
-   python manage.py fill_payments  # Optional: Seed initial payment data
-   ```
 
-4. **Run Server**:
-   ```bash
+4. You can fill some test payment data:
+   python manage.py fill_payments
+
+5. Start the server:
    python manage.py runserver
-   ```
 
-## 🔗 API Endpoints
+## Endpoints
 
-| Resource | Method | Endpoint | Description |
-| :--- | :--- | :--- | :--- |
-| **Auth** | POST | `/api/users/login/` | Obtain JWT tokens |
-| **Auth** | POST | `/api/users/token/refresh/` | Refresh JWT tokens |
-| **Courses** | GET/POST | `/api/materials/courses/` | List/Create Courses |
-| **Lessons** | GET | `/api/materials/lessons/` | List Lessons (Paginated) |
-| **Subscription** | POST | `/api/materials/course/subscribe/` | Toggle Subscription |
-| **Payments** | POST | `/api/users/payments/create/` | Generate Stripe Checkout Link |
-| **Payments** | GET | `/api/users/payments/status/<id>/` | Check Stripe Payment Status |
+- Login: /api/users/login/
+- Token Refresh: /api/users/token/refresh/
+- Courses: /api/materials/courses/
+- Lessons: /api/materials/lessons/
+- Subscribe: /api/materials/course/subscribe/
+- Create Payment: /api/users/payments/create/
+- Payment Status: /api/users/payments/status/id/
 
-## 🧪 Testing
-- **Local Tests**: `python manage.py test`
-- **Coverage**: `coverage run manage.py test`
+## Testing
+You can run tests with:
+python manage.py test
 
----
-*Created as part of the DRF Learning Path.*
+I also used coverage to check how much of the code is tested.
