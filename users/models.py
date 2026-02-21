@@ -27,6 +27,10 @@ class Payment(models.Model):
     paid_lesson = models.ForeignKey('materials.Lesson', on_delete=models.SET_NULL, null=True, blank=True, related_name='payments', verbose_name='Paid Lesson')
     payment_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Payment Amount')
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, verbose_name='Payment Method')
+    
+    session_id = models.CharField(max_length=255, blank=True, null=True, verbose_name='Session ID')
+    payment_link = models.URLField(max_length=400, blank=True, null=True, verbose_name='Payment Link')
+    status = models.CharField(max_length=50, default='pending', verbose_name='Payment Status')
 
     def __str__(self):
         return f"{self.user} - {self.payment_amount} ({self.payment_date})"
