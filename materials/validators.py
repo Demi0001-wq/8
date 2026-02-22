@@ -1,7 +1,7 @@
-import re
 from rest_framework.serializers import ValidationError
 
-class YoutubeValidator:
+
+class YouTubeValidator:
     def __init__(self, field):
         self.field = field
 

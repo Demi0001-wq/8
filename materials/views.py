@@ -5,10 +5,11 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from .models import Course, Lesson, Subscription
-from .serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
+from .serializers import CourseSerializer, LessonSerializer
 from .permissions import IsModerator, IsOwner
 from .paginators import MaterialsPagination
 from .tasks import send_course_update_email
+
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
@@ -31,6 +32,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsAuthenticated, IsOwner]
         return [permission() for permission in self.permission_classes]
 
+
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, ~IsModerator]
@@ -38,26 +40,31 @@ class LessonCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+
 class LessonListAPIView(generics.ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator | IsOwner]
     pagination_class = MaterialsPagination
 
+
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator | IsOwner]
+
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator | IsOwner]
 
+
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsOwner]
+
 
 class SubscriptionAPIView(APIView):
     """
@@ -70,7 +77,13 @@ class SubscriptionAPIView(APIView):
     @extend_schema(
         summary="Toggle Course Subscription",
         description="Toggles a user's subscription to a specific course.",
-        request={'application/json': {'type': 'object', 'properties': {'course': {'type': 'integer'}}, 'required': ['course']}},
+        request={
+            'application/json': {
+                'type': 'object',
+                'properties': {'course': {'type': 'integer'}},
+                'required': ['course']
+            }
+        },
         responses={200: {'type': 'object', 'properties': {'message': {'type': 'string'}}}}
     )
     def post(self, *args, **kwargs):

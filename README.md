@@ -6,11 +6,23 @@ This is a backend project for a Learning Management System made with Django and 
 
 This project includes user management where you can log in with your email. I used SimpleJWT for authentication. There are different roles like Moderators and Owners to handle who can see or edit the courses.
 
+# LMS Project
+
+This is a backend project for a Learning Management System made with Django and Django REST Framework.
+
+## Features
+
+This project includes user management where you can log in with your email. I used SimpleJWT for authentication. There are different roles like Moderators and Owners to handle who can see or edit the courses.
+
 The materials app has Courses and Lessons. I added a way for users to subscribe to courses. I also made a validator to make sure video links are only from youtube.com.
 
 For payments, I integrated Stripe. It can create products and prices, and then give a checkout link. You can also check the status of a payment.
 
 Documentation is handled by drf-spectacular. You can see the Swagger or Redoc pages to check the endpoints.
+
+## Server Address
+
+The application is deployed at: [http://your-server-ip-or-domain](http://your-server-ip-or-domain)
 
 ## Tech Stack
 - Django and DRF
@@ -21,48 +33,39 @@ Documentation is handled by drf-spectacular. You can see the Swagger or Redoc pa
 
 ## How to setup (Local)
 
-1. Install everything from requirements.txt:
-   pip install -r requirements.txt
+### Prerequisites
+- Docker and Docker Compose installed.
+- Git.
 
-2. Put your Stripe key in config/settings.py:
-   STRIPE_API_KEY = 'your_key_here'
+### Local Installation Steps
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Demi0001-wq/docker.git
+   cd docker
+   ```
 
-3. Run the migrations:
-   python manage.py migrate
-
-4. You can fill some test payment data:
-   python manage.py fill_payments
-
-5. Start the server:
-   python manage.py runserver
-
-## How to setup (Docker)
-
-1. **Create .env file**: 
-   Copy `env.sample` to `.env` and fill in your variables (like `STRIPE_API_KEY`).
+2. **Create .env file**: 
+   Copy `env.sample` to `.env` and fill in your variables.
    ```bash
    cp env.sample .env
    ```
+   > [!IMPORTANT]
+   > Ensure `STRIPE_API_KEY` and database credentials are set correctly in `.env`.
 
-2. **Build and start the containers**:
+3. **Build and start the services**:
+   This project uses `docker-compose` to manage services (Django, PostgreSQL, Redis, Celery, and Nginx).
    ```bash
    docker-compose up --build -d
    ```
 
-3. **Check logs**:
-   ```bash
-   docker-compose logs -f backend
-   ```
-
-4. **Run migrations (if not automatic)**:
+4. **Run migrations and collect static files**:
    ```bash
    docker-compose exec backend python manage.py migrate
+   docker-compose exec backend python manage.py collectstatic --no-input
    ```
 
-5. **Stop containers**:
-   ```bash
-   docker-compose down
-   ```
+5. **Access the application**:
+   The application will be available at [http://localhost](http://localhost) (via Nginx).
 
 ## Endpoints
 
@@ -83,37 +86,33 @@ I also used coverage to check how much of the code is tested.
 
 ## CI/CD and Automation
 
-This project uses GitHub Actions for continuous integration and deployment.
+This project uses **GitHub Actions** for continuous integration and continuous deployment (CI/CD). The workflow is defined in `.github/workflows/deploy.yml`.
 
-### GitHub Actions Workflow
-
-The workflow is defined in \.github/workflows/deploy.yml\ and performs:
-1.  **Testing**: Automatically runs Django tests on every push and pull request.
-2.  **Deployment**: Automatically deploys the code to the remote server if tests pass.
+### Workflow Steps
+1.  **Linting**: Runs `flake8` to ensure code quality.
+2.  **Testing**: Runs Django unit tests with a temporary PostgreSQL and Redis setup.
+3.  **Docker Build Check**: Verifies that Docker images can be built successfully before deployment.
+4.  **Deployment**: If all previous steps pass, the code is automatically deployed to the remote server on every push to `main` or `develop`.
 
 ### Remote Server Setup
 
-To enable automated deployment, your remote server should:
-1.  Have **Docker** and **Docker Compose** installed.
-2.  Have the project repository cloned at \~/app/docker\.
-3.  Configure **SSH key access** and add the private key to GitHub Secrets.
+1.  **Install Docker & Compose**: Ensure the server has Docker and Docker Compose installed.
+2.  **Project Directory**: Clone the project to `~/app/docker`.
+3.  **Nginx/Reverse Proxy**: Nginx is included in the Docker Compose setup to handle incoming traffic on port 80.
 
 ### GitHub Secrets Configuration
 
-For the workflow to work, add the following secrets in your GitHub repository settings (**Settings > Secrets and variables > Actions**):
+Add these to your GitHub repo secrets (**Settings > Secrets and variables > Actions**):
 
-- \DJANGO_SECRET_KEY\: Your Django secret key.
-- \SERVER_HOST\: IP address or domain of your remote server.
-- \SERVER_USER\: SSH username (e.g., \oot\ or \ubuntu\).
-- \SERVER_SSH_KEY\: Your private SSH key.
-- \SERVER_SSH_PASSPHRASE\: (Optional) Passphrase for your SSH key.
-
-For other variables (Stripe, Email), refer to \env.sample\ and add them as secrets if you wish to inject them during deployment.
+- `DJANGO_SECRET_KEY`: Your production secret key.
+- `SERVER_HOST`: Remote server IP/Domain.
+- `SERVER_USER`: SSH username.
+- `SERVER_SSH_KEY`: Private SSH key for deployment.
+- `SERVER_SSH_PASSPHRASE`: (Optional) SSH key passphrase.
 
 ---
 
 ## Submission
-The changes have been pushed to a new branch. You can create the pull request using the link below:
+The project is submitted via Pull Request from `develop` to `main`.
 
-[Create Pull Request](https://github.com/Demi0001-wq/docker/compare/develop...task-cicd-setup)
-
+[View Pull Request](https://github.com/Demi0001-wq/docker/pull/3)

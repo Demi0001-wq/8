@@ -3,13 +3,14 @@ from users.models import Payment, User
 from materials.models import Course, Lesson
 from datetime import date
 
+
 class Command(BaseCommand):
     help = 'Fill the database with sample payment data'
 
     def handle(self, *args, **options):
         # Ensure we have a user
-        user, _ = User.objects.get_or_create(email='admin@example.com')
-        if _:
+        user, created = User.objects.get_or_create(email='admin@example.com')
+        if created:
             user.set_password('admin123')
             user.is_staff = True
             user.is_superuser = True

@@ -2,6 +2,7 @@ from django.test import TestCase
 from unittest.mock import patch
 from users.services import create_stripe_product, create_stripe_price, create_stripe_session, retrieve_stripe_session
 
+
 class StripeServiceTestCase(TestCase):
     @patch('stripe.Product.create')
     def test_create_stripe_product(self, mock_create):
