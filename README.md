@@ -1,59 +1,54 @@
-# LMS Project
+# 🎓 LMS Project
 
-This is a backend project for a Learning Management System made with Django and Django REST Framework.
+This is a **backend project** for a Learning Management System built with **Django** and **Django REST Framework**.
 
-## Features
+## 🚀 Features
 
-This project includes user management where you can log in with your email. I used SimpleJWT for authentication. There are different roles like Moderators and Owners to handle who can see or edit the courses.
+- **User Management**: Secure login using **SimpleJWT**.
+- **Role-Based Access**: Specialized roles like *Moderators* and *Owners* to manage course visibility and permissions.
+- **Materials System**: 
+  - **Courses** and **Lessons** management.
+  - **Subscriptions**: Users can subscribe/unsubscribe to courses.
+  - **Validation**: Automatic *YouTube link* validation for lesson videos.
+- **Payments**: Full **Stripe Integration** for creating products, prices, and checkout sessions.
+- **Documentation**: Interactive API docs powered by **drf-spectacular** (*Swagger* and *Redoc*).
 
-# LMS Project
+## 🌐 Server Address
 
-This is a backend project for a Learning Management System made with Django and Django REST Framework.
+The application is deployed at: **[http://your-server-ip-or-domain](http://your-server-ip-or-domain)**
 
-## Features
+## 🛠 Tech Stack
+- **Django** & **Django REST Framework**
+- **SimpleJWT** (*Authentication*)
+- **Stripe** (*Payments*)
+- **drf-spectacular** (*API Documentation*)
+- **PostgreSQL** (*Database*)
+- **Redis** & **Celery** (*Async Tasks*)
+- **Docker** & **Docker Compose** (*Containerization*)
 
-This project includes user management where you can log in with your email. I used SimpleJWT for authentication. There are different roles like Moderators and Owners to handle who can see or edit the courses.
-
-The materials app has Courses and Lessons. I added a way for users to subscribe to courses. I also made a validator to make sure video links are only from youtube.com.
-
-For payments, I integrated Stripe. It can create products and prices, and then give a checkout link. You can also check the status of a payment.
-
-Documentation is handled by drf-spectacular. You can see the Swagger or Redoc pages to check the endpoints.
-
-## Server Address
-
-The application is deployed at: [http://your-server-ip-or-domain](http://your-server-ip-or-domain)
-
-## Tech Stack
-- Django and DRF
-- SimpleJWT for auth
-- Stripe for payments
-- drf-spectacular for docs
-- SQLite
-
-## How to setup (Local)
+## 📦 How to Setup (Local)
 
 ### Prerequisites
-- Docker and Docker Compose installed.
-- Git.
+- **Docker** and **Docker Compose** installed.
+- **Git**.
 
 ### Local Installation Steps
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Demi0001-wq/docker.git
-   cd docker
+   git clone https://github.com/Demi0001-wq/8.git
+   cd 8
    ```
 
 2. **Create .env file**: 
-   Copy `env.sample` to `.env` and fill in your variables.
+   Copy `env.sample` to `.env` and fill in your unique variables.
    ```bash
    cp env.sample .env
    ```
    > [!IMPORTANT]
-   > Ensure `STRIPE_API_KEY` and database credentials are set correctly in `.env`.
+   > Ensure **STRIPE_API_KEY** and database credentials are set correctly in `.env`.
 
 3. **Build and start the services**:
-   This project uses `docker-compose` to manage services (Django, PostgreSQL, Redis, Celery, and Nginx).
+   This project uses `docker-compose` to manage services (*Django, PostgreSQL, Redis, Celery, and Nginx*).
    ```bash
    docker-compose up --build -d
    ```
@@ -65,64 +60,61 @@ The application is deployed at: [http://your-server-ip-or-domain](http://your-se
    ```
 
 5. **Access the application**:
-   The application will be available at [http://localhost](http://localhost) (via Nginx).
+   The application will be available at: **[http://localhost](http://localhost)** (via **Nginx**).
 
-## Endpoints
+## 🛣 Endpoints
 
-- Login: /api/users/login/
-- Token Refresh: /api/users/token/refresh/
-- Courses: /api/materials/courses/
-- Lessons: /api/materials/lessons/
-- Subscribe: /api/materials/course/subscribe/
-- Create Payment: /api/users/payments/create/
-- Payment Status: /api/users/payments/status/id/
+- **Login**: `/api/users/login/`
+- **Token Refresh**: `/api/users/token/refresh/`
+- **Courses**: `/api/materials/courses/`
+- **Lessons**: `/api/materials/lessons/`
+- **Subscribe**: `/api/materials/course/subscribe/`
+- **Create Payment**: `/api/users/payments/create/`
+- **Payment Status**: `/api/users/payments/status/id/`
 
-## Testing
-You can run tests with:
+## 🧪 Testing
+Run the test suite with:
+```bash
 python manage.py test
+```
+*Note: I used `coverage` to ensure high test quality and reliability.*
 
-I also used coverage to check how much of the code is tested.
 
+## ⚙️ CI/CD and Automation
 
-## CI/CD and Automation
-
-This project uses **GitHub Actions** for continuous integration and continuous deployment (CI/CD). The workflow is defined in `.github/workflows/deploy.yml`.
+This project utilizes **GitHub Actions** for **Continuous Integration** and **Continuous Deployment** (CI/CD). 
 
 ### Workflow Steps
-1.  **Linting**: Runs `flake8` to ensure code quality.
-2.  **Testing**: Runs Django unit tests with a temporary PostgreSQL and Redis setup.
-3.  **Docker Build Check**: Verifies that Docker images can be built successfully before deployment.
-4.  **Deployment**: If all previous steps pass, the code is automatically deployed to the remote server on every push to `main` or `develop`.
+1. **Linting**: Runs `flake8` to ensure **PEP 8** compliance (*0 errors*).
+2. **Testing**: Executes Django unit tests with temporary *PostgreSQL* and *Redis* services.
+3. **Docker Build Check**: Verifies that Docker images build successfully before any deployment.
+4. **Deployment**: Automatically deploys the code to the remote server on every push to **main** or **develop**.
 
 ### Remote Server Setup
+1. **Install Docker**: Ensure the server has **Docker** and **Compose** installed.
+2. **Project Directory**: Clone the project to `~/app/docker`.
+3. **Nginx**: Included in the **Docker Compose** setup for reverse proxying on port **80**.
 
-1.  **Install Docker & Compose**: Ensure the server has Docker and Docker Compose installed.
-2.  **Project Directory**: Clone the project to `~/app/docker`.
-3.  **Nginx/Reverse Proxy**: Nginx is included in the Docker Compose setup to handle incoming traffic on port 80.
+## 💳 Stripe Testing
 
-## Stripe Testing
+Use these details to test the payment flow:
 
-This project uses Stripe for payment processing. To test the integration:
-
-1.  **API Keys**: You can find your test API keys in the [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys).
-2.  **Test Cards**: Use the following standard test cards from the [Stripe documentation](https://stripe.com/docs/testing):
-    - **Success Card**: `4242 4242 4242 4242`, CVC: `any`, Exp: `any future date`.
-    - **International Card**: `4000 0566 5443 4554` (for testing foreign currencies).
+1. **API Keys**: Found in your [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys).
+2. **Test Cards**:
+   - **Success Card**: `4242 4242 4242 4242`, CVC: `any`, Exp: `future date`.
+   - **International Card**: `4000 0566 5443 4554` (*for foreign currencies*).
 
 ### GitHub Secrets Configuration
-
-Add these to your GitHub repo secrets (**Settings > Secrets and variables > Actions**):
-
-- `DJANGO_SECRET_KEY`: Your production secret key.
-- `STRIPE_API_KEY`: Your Stripe test secret key (`sk_test_...`).
-- `SERVER_HOST`: Remote server IP/Domain.
-- `SERVER_USER`: SSH username.
-- `SERVER_SSH_KEY`: Private SSH key for deployment.
-- `SERVER_SSH_PASSPHRASE`: (Optional) SSH key passphrase.
+Add these to your **GitHub Settings > Secrets and variables > Actions**:
+- `DJANGO_SECRET_KEY`: *Your production secret key.*
+- `STRIPE_API_KEY`: *Your Stripe test secret key (`sk_test_...`).*
+- `SERVER_HOST`: *Remote server IP/Domain.*
+- `SERVER_USER`: *SSH username.*
+- `SERVER_SSH_KEY`: *Private SSH key.*
 
 ---
 
-## Submission
-The project is submitted via Pull Request from `develop` to `main`.
+## 📝 Submission
+The project is submitted via **Pull Request** from **develop** to **main**.
 
-[View Pull Request](https://github.com/Demi0001-wq/docker/pull/3)
+**[View Final Pull Request](https://github.com/Demi0001-wq/8/compare/main...develop?expand=1)**
