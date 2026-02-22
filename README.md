@@ -1,73 +1,120 @@
-# LMS Backend (Django REST Framework)
+# LMS Project
 
-A robust Learning Management System (LMS) backend built with Django and Django REST Framework. This project features a custom user model, a dedicated materials application with hierarchical lesson structure, and demonstration of multiple API architectural patterns.
+This is a backend project for a Learning Management System built with Django and Django REST Framework.
 
-## 🚀 Features
+## Features
 
-### 👤 Custom User Management
-- **Email Authentication**: Replaces the default Django username with email-based login.
-- **Extended Profiles**: Includes fields for `telephone`, `city`, and `avatar`.
+- User Management: Secure login using SimpleJWT.
+- Role-Based Access: Specialized roles like Moderators and Owners to manage course visibility and permissions.
+- Materials System: 
+  - Courses and Lessons management.
+  - Subscriptions: Users can subscribe/unsubscribe to courses.
+  - Validation: Automatic YouTube link validation for lesson videos.
+- Payments: Full Stripe Integration for creating products, prices, and checkout sessions.
+- Documentation: Interactive API docs powered by drf-spectacular (Swagger and Redoc).
 
-### 💰 Payments System (`users` app)
-- **Payment Tracking**: New `Payment` model tracks user payments for courses or individual lessons.
-- **Advanced Filtering**: Built-in payment list API with filtering by course, lesson, and payment method (cash/transfer).
-- **Sorting**: Flexible sorting by payment date.
+## Server Address
 
-### 🛠️ API Architecture
-- **ViewSet Pattern**: `Course` CRUD is implemented using `ModelViewSet`.
-- **Generic View Pattern**: `Lesson` CRUD is implemented using granular Generic views.
-- **Enhanced Serializers**: 
-    - `CourseSerializer` now includes `lessons_count` and nested `lessons` details.
-- **Filtering**: Integrated `django-filter` for the Payments API.
+The application is deployed at: [http://your-server-ip-or-domain](http://your-server-ip-or-domain)
 
-## 📦 Tech Stack
-- **Framework**: Django 5.x
-- **API**: Django REST Framework (DRF)
-- **Filtering**: django-filter
-- **Image Handling**: Pillow
-- **Database**: SQLite (Default)
+## Tech Stack
+- Django & Django REST Framework
+- SimpleJWT (Authentication)
+- Stripe (Payments)
+- drf-spectacular (API Documentation)
+- PostgreSQL (Database)
+- Redis & Celery (Async Tasks)
+- Docker & Docker Compose (Containerization)
 
-## 🛠️ Setup & Installation
+## How to Setup (Local)
 
-1. **Clone the repository**:
+### Prerequisites
+- Docker and Docker Compose installed.
+- Git.
+
+### Local Installation Steps
+1. Clone the repository:
    ```bash
-   git clone https://github.com/Demi0001-wq/DRF.git
-   cd DRF
+   git clone https://github.com/Demi0001-wq/8.git
+   cd 8
    ```
 
-2. **Install dependencies**:
+2. Create .env file: 
+   Copy env.sample to .env and fill in your unique variables.
    ```bash
-   pip install -r requirements.txt
+   cp env.sample .env
+   ```
+   > [!IMPORTANT]
+   > Ensure STRIPE_API_KEY and database credentials are set correctly in .env.
+
+3. Build and start the services:
+   This project uses docker-compose to manage services (Django, PostgreSQL, Redis, Celery, and Nginx).
+   ```bash
+   docker-compose up --build -d
    ```
 
-3. **Run migrations**:
+4. Run migrations and collect static files:
    ```bash
-   python manage.py migrate
+   docker-compose exec backend python manage.py migrate
+   docker-compose exec backend python manage.py collectstatic --no-input
    ```
 
-4. **Populate Data**:
-   ```bash
-   python manage.py fill_payments
-   ```
+5. Access the application:
+   The application will be available at: [http://localhost](http://localhost) (via Nginx).
 
-5. **Start the server**:
-   ```bash
-   python manage.py run_server
-   ```
+## Endpoints
 
-## 🔗 API Endpoints
+- Login: /api/users/login/
+- Token Refresh: /api/users/token/refresh/
+- Courses: /api/materials/courses/
+- Lessons: /api/materials/lessons/
+- Subscribe: /api/materials/course/subscribe/
+- Create Payment: /api/users/payments/create/
+- Payment Status: /api/users/payments/status/id/
 
-### Courses
-- `GET /api/materials/courses/` - List all courses (includes nested lessons)
-- `POST /api/materials/courses/` - Create a course
+## Testing
+Run the test suite with:
+```bash
+python manage.py test
+```
+Note: I used coverage to ensure high test quality and reliability.
 
-### Lessons
-- `GET /api/materials/lessons/` - List all lessons
-- `POST /api/materials/lessons/create/` - Create a lesson
 
-### Payments
-- `GET /api/users/payments/` - List payments with filtering support.
-  - Query params: `paid_course`, `paid_lesson`, `payment_method`, `ordering=payment_date`.
+## CI/CD and Automation
 
-## 🧪 Testing
-A comprehensive **Postman Guide** is available in the project documentation for local endpoint verification.
+This project utilizes GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD). 
+
+### Workflow Steps
+1. Linting: Runs flake8 to ensure PEP 8 compliance (0 errors).
+2. Testing: Executes Django unit tests with temporary PostgreSQL and Redis services.
+3. Docker Build Check: Verifies that Docker images build successfully before any deployment.
+4. Deployment: Automatically deploys the code to the remote server on every push to main or develop.
+
+### Remote Server Setup
+1. Install Docker: Ensure the server has Docker and Compose installed.
+2. Project Directory: Clone the project to ~/app/docker.
+3. Nginx: Included in the Docker Compose setup for reverse proxying on port 80.
+
+## Stripe Testing
+
+Use these details to test the payment flow:
+
+1. API Keys: Found in your [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys).
+2. Test Cards:
+   - Success Card: 4242 4242 4242 4242, CVC: any, Exp: future date.
+   - International Card: 4000 0566 5443 4554 (for foreign currencies).
+
+### GitHub Secrets Configuration
+Add these to your GitHub Settings > Secrets and variables > Actions:
+- DJANGO_SECRET_KEY: Your production secret key.
+- STRIPE_API_KEY: Your Stripe test secret key (sk_test_...).
+- SERVER_HOST: Remote server IP/Domain.
+- SERVER_USER: SSH username.
+- SERVER_SSH_KEY: Private SSH key.
+
+---
+
+## Submission
+The project is submitted via Pull Request from develop to main.
+
+[View Final Pull Request](https://github.com/Demi0001-wq/8/compare/main...develop?expand=1)

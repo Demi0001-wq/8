@@ -1,0 +1,15 @@
+.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+.idea
+.vscode
+venv/
+env/
+htmlcov/
+static/
+media/
+db.sqlite3
+docker-compose.override.yml
