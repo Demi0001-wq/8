@@ -19,7 +19,7 @@ Documentation is handled by drf-spectacular. You can see the Swagger or Redoc pa
 - drf-spectacular for docs
 - SQLite
 
-## How to setup
+## How to setup (Local)
 
 1. Install everything from requirements.txt:
    pip install -r requirements.txt
@@ -35,6 +35,34 @@ Documentation is handled by drf-spectacular. You can see the Swagger or Redoc pa
 
 5. Start the server:
    python manage.py runserver
+
+## How to setup (Docker)
+
+1. **Create .env file**: 
+   Copy `env.sample` to `.env` and fill in your variables (like `STRIPE_API_KEY`).
+   ```bash
+   cp env.sample .env
+   ```
+
+2. **Build and start the containers**:
+   ```bash
+   docker-compose up --build -d
+   ```
+
+3. **Check logs**:
+   ```bash
+   docker-compose logs -f backend
+   ```
+
+4. **Run migrations (if not automatic)**:
+   ```bash
+   docker-compose exec backend python manage.py migrate
+   ```
+
+5. **Stop containers**:
+   ```bash
+   docker-compose down
+   ```
 
 ## Endpoints
 
