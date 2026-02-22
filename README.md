@@ -100,11 +100,21 @@ This project uses **GitHub Actions** for continuous integration and continuous d
 2.  **Project Directory**: Clone the project to `~/app/docker`.
 3.  **Nginx/Reverse Proxy**: Nginx is included in the Docker Compose setup to handle incoming traffic on port 80.
 
+## Stripe Testing
+
+This project uses Stripe for payment processing. To test the integration:
+
+1.  **API Keys**: You can find your test API keys in the [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys).
+2.  **Test Cards**: Use the following standard test cards from the [Stripe documentation](https://stripe.com/docs/testing):
+    - **Success Card**: `4242 4242 4242 4242`, CVC: `any`, Exp: `any future date`.
+    - **International Card**: `4000 0566 5443 4554` (for testing foreign currencies).
+
 ### GitHub Secrets Configuration
 
 Add these to your GitHub repo secrets (**Settings > Secrets and variables > Actions**):
 
 - `DJANGO_SECRET_KEY`: Your production secret key.
+- `STRIPE_API_KEY`: Your Stripe test secret key (`sk_test_...`).
 - `SERVER_HOST`: Remote server IP/Domain.
 - `SERVER_USER`: SSH username.
 - `SERVER_SSH_KEY`: Private SSH key for deployment.
