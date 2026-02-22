@@ -79,3 +79,41 @@ You can run tests with:
 python manage.py test
 
 I also used coverage to check how much of the code is tested.
+
+
+## CI/CD and Automation
+
+This project uses GitHub Actions for continuous integration and deployment.
+
+### GitHub Actions Workflow
+
+The workflow is defined in \.github/workflows/deploy.yml\ and performs:
+1.  **Testing**: Automatically runs Django tests on every push and pull request.
+2.  **Deployment**: Automatically deploys the code to the remote server if tests pass.
+
+### Remote Server Setup
+
+To enable automated deployment, your remote server should:
+1.  Have **Docker** and **Docker Compose** installed.
+2.  Have the project repository cloned at \~/app/docker\.
+3.  Configure **SSH key access** and add the private key to GitHub Secrets.
+
+### GitHub Secrets Configuration
+
+For the workflow to work, add the following secrets in your GitHub repository settings (**Settings > Secrets and variables > Actions**):
+
+- \DJANGO_SECRET_KEY\: Your Django secret key.
+- \SERVER_HOST\: IP address or domain of your remote server.
+- \SERVER_USER\: SSH username (e.g., \oot\ or \ubuntu\).
+- \SERVER_SSH_KEY\: Your private SSH key.
+- \SERVER_SSH_PASSPHRASE\: (Optional) Passphrase for your SSH key.
+
+For other variables (Stripe, Email), refer to \env.sample\ and add them as secrets if you wish to inject them during deployment.
+
+---
+
+## Submission
+The changes have been pushed to a new branch. You can create the pull request using the link below:
+
+[Create Pull Request](https://github.com/Demi0001-wq/docker/compare/develop...task-cicd-setup)
+
