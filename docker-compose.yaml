@@ -30,11 +30,12 @@ services:
     restart: always
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+             python manage.py collectstatic --no-input &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
-    ports:
-      - "8000:8000"
+      - static_volume:/app/static
+      - media_volume:/app/media
     env_file:
       - .env
     depends_on:
@@ -42,6 +43,18 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/app/static
+      - media_volume:/app/media
+    depends_on:
+      - backend
 
   celery:
     build: .
@@ -73,3 +86,5 @@ services:
 
 volumes:
   pg_data:
+  static_volume:
+  media_volume:
